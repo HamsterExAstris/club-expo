@@ -1,15 +1,16 @@
-import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+import { SafeAreaView, StyleSheet } from 'react-native';
+import { WebView } from 'react-native-webview';
 
 export default function TabOneScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Unauthorized</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/unauthorized/index.tsx" />
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <WebView
+        source={{ uri: "https://www.lipsum.com" }}
+        style={{ flex: 1, marginTop: 20 }}
+
+        pagingEnabled
+      />
+    </SafeAreaView>
   );
 }
 
