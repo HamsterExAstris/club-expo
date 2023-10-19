@@ -50,6 +50,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="volume/[id]"
+        options={{
+          href: null
+        }}
+      />
+      <Tabs.Screen
         name="two"
         options={{
           title: 'Tab Two',

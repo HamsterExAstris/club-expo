@@ -54,7 +54,7 @@ export default function SeriesDetailScreen() {
         data={volumes?.volumes}
         keyExtractor={({ slug }) => slug}
         renderItem={({ item }) => (
-          <Link href={{ pathname: "./[id]", params: {id: item.slug}}} asChild>
+          <Link href={{ pathname: "/volume/[id]", params: {id: item.slug}}} asChild>
               <Pressable>
                 {({ pressed }) => (
                   <Text style={{ opacity: pressed ? 0.5 : 1 }}>{item.title}{item.originalTitle ? ` (${item.originalTitle})` : ""}</Text>
