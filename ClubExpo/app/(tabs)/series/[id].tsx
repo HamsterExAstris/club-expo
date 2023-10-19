@@ -5,11 +5,9 @@ import { Text, View } from '../../../components/Themed';
 
 export default function SeriesDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const [selectedVolume, setSelectedVolume] = useState<string>();
 
   const [series, setSeries] = useState<Series>();
-
-  const [volumes, setVolumes] = useState<VolumeRequest>({
+  const [volumes, setVolumes] = useState<VolumesRequest>({
     pagination: {
       lastPage: true,
       limit: 1,
