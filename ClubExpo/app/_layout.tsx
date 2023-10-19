@@ -8,7 +8,7 @@ import Unauthorized from './unauthorized';
 
 export {
   // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
+  ErrorBoundary
 } from 'expo-router';
 
 export const unstable_settings = {
@@ -53,7 +53,7 @@ function RootLayoutNav() {
       try {
         // Artificially delay for five seconds to simulate a slow loading
         // experience. Please remove this if you copy and paste the code!
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await new Promise(resolve => setTimeout(resolve, 1));
       } catch (e) {
         console.warn(e);
       } finally {

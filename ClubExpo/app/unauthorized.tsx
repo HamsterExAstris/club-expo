@@ -1,16 +1,16 @@
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 export default function TabOneScreen() {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}>
       <WebView
-        source={{ uri: "https://www.lipsum.com" }}
+        source={{ html: "<html><body>Loading</body></html>" }}
         style={{ flex: 1, marginTop: 20 }}
 
         pagingEnabled
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
