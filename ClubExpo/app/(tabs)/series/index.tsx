@@ -11,7 +11,6 @@ export default function SeriesListScreen() {
       skip: 0
     }, series: []
   });
-  const [selectedId, setSelectedId] = useState<string>();
 
   const getSeries = async () => {
     try {
@@ -30,13 +29,6 @@ export default function SeriesListScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Series</Text>
-      {
-        selectedId &&
-        <>
-          <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-          <Text>{selectedId}</Text>
-        </>
-      }
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <FlatList
         data={data?.series}
