@@ -1,7 +1,7 @@
 import { Link } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { FlatList, Pressable, StyleSheet } from 'react-native';
-import { Text, View } from '../../components/Themed';
+import { Text, View } from '../../../components/Themed';
 
 export default function SeriesListScreen() {
   const [data, setData] = useState<SeriesRequest>({

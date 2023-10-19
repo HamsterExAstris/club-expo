@@ -23,7 +23,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
       }}>
       <Tabs.Screen
-        name="index"
+        name="series/index"
         options={{
           title: 'Series',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
@@ -41,6 +41,12 @@ export default function TabLayout() {
               </Pressable>
             </Link>
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="series/[id]"
+        options={{
+          href: null
         }}
       />
       <Tabs.Screen
