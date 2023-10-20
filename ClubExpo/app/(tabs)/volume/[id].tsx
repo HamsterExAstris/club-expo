@@ -40,7 +40,7 @@ export default function VolumeDetailScreen() {
         data={parts?.parts}
         keyExtractor={({ slug }) => slug}
         renderItem={({ item }) => (
-          <Link href={{ pathname: "/volume/[id]", params: {id: item.slug}}} asChild>
+          <Link href={{ pathname: "/part/[id]", params: {id: item.slug}}} asChild>
               <Pressable>
                 {({ pressed }) => (
                   <Text style={{ opacity: pressed ? 0.5 : 1 }}>{item.title}</Text>

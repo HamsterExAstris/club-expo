@@ -56,9 +56,16 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="part/[id]"
+        options={{
+          href: null
+        }}
+      />
+      <Tabs.Screen
+        name="index"
         options={{
           title: 'Tab Two',
+          href: null,
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
