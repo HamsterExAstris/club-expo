@@ -116,17 +116,28 @@ class Repository {
 
     public static getPart = async (token: string | null | undefined, id: string) => {
         const result = await getIfId<Part>(token, "parts", id);
-        return (result && (!result.expiration || result.expiration > new Date()))
-            ? result
-            : undefined;
+
+        if (typeof result?.expiration === "string") {
+            result.expiration = new Date(result.expiration);
+        }
+
+        // We can't check the expiration because that doesn't take volume ownership into account.
+        return result;
     }
 
-    public static getPartData = async (token: string | null | undefined, id: string) => {
+    public static getPartHtml = async (token: string | null | undefined, id: string) => {
         // Check to make sure this part isn't expired.
         const parentPart = await this.getPart(token, id);
-        return parentPart
-            ? await getIfId<PartData>(token, "parts", id, "data")
-            : undefined;
+
+        const url = `https://labs.j-novel.club/embed/${parentPart?.legacyId}/data.xhtml`;
+        const headers = new Headers();
+        if (token) {
+            headers.append("Authorization", `Bearer ${token}`); 
+        }
+        const response = await fetch(url, {
+            headers: headers
+        });
+        return await response.text();
     }
 
     public static login = async (username: string, password: string) => {

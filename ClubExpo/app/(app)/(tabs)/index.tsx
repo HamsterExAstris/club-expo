@@ -1,5 +1,5 @@
 import { Redirect } from "expo-router";
-import { useSession } from "../../components/ctx";
+import { useSession } from "../../../components/ctx";
 
 export default function Home() {
   const session = useSession();

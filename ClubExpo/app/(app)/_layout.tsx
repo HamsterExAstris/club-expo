@@ -7,6 +7,7 @@ import { useSession } from '../../components/ctx';
 
 export default function AppLayout() {
     const session = useSession();
+    const colorScheme = useColorScheme();
 
     // You can keep the splash screen open, or render a loading screen like we do here.
     if (session?.isLoading) {
@@ -20,8 +21,6 @@ export default function AppLayout() {
         // in the headless Node process that the pages are rendered in.
         return <Redirect href="/sign-in" />;
     }
-
-    const colorScheme = useColorScheme();
 
     // This layout can be deferred because it's not the root layout.
     return <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

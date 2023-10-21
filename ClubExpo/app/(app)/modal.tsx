@@ -3,7 +3,7 @@ import { Button, FlatList, Platform, StyleSheet } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
-import { Text, View } from '../components/Themed';
+import { Text, View } from '../../components/Themed';
 
 export default function ModalScreen() {
   const [keys, setKeys] = useState<readonly string[]>();

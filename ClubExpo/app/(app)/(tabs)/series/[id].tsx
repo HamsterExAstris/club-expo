@@ -1,9 +1,9 @@
 import { Link, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { FlatList, Pressable, StyleSheet } from 'react-native';
-import { Text, View } from '../../../components/Themed';
-import { useSession } from '../../../components/ctx';
-import Repository from '../../../components/jnovel-club-api/Repository';
+import { Text, View } from '../../../../components/Themed';
+import { useSession } from '../../../../components/ctx';
+import Repository from '../../../../components/jnovel-club-api/Repository';
 
 export default function SeriesDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

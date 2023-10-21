@@ -2,18 +2,18 @@ import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import WebView from 'react-native-webview';
-import { View } from '../../components/Themed';
-import { useSession } from '../../components/ctx';
-import Repository from '../../components/jnovel-club-api/Repository';
+import { View } from '../../../components/Themed';
+import { useSession } from '../../../components/ctx';
+import Repository from '../../../components/jnovel-club-api/Repository';
 
 export default function PartDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const [part, setPart] = useState<PartData>();
+  const [part, setPart] = useState<string>();
   const session = useSession();
 
   const getPart = async () => {
-    setPart(await Repository.getPartData(session?.session, id))
+    setPart(await Repository.getPartHtml(session?.session, id))
   };
 
   useEffect(() => {
@@ -26,12 +26,12 @@ export default function PartDetailScreen() {
         Platform.OS !== "web"
           ?
           <WebView
-            source={{ html: part?.clearData?.replace("</head>", '<meta name="viewport" content="width=device-width, initial-scale=1"><style type="text/css">body {text-align:justify;} img {max-width: 100%}</style></head>') ?? "" }}
+            source={{ html: part?.replace("</head>", '<meta name="viewport" content="width=device-width, initial-scale=1"><style type="text/css">body {text-align:justify;} img {max-width: 100%}</style></head>') ?? "" }}
             style={{ flex: 1, marginTop: 20 }}
 
             pagingEnabled
           />
-          : <iframe style={{ height: '100%' }} srcDoc={part?.clearData} />
+          : <iframe style={{ height: '100%' }} srcDoc={part} />
       }
     </View>
   );
