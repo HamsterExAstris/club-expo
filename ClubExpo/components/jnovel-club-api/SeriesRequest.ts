@@ -1,4 +1,5 @@
-type SeriesRequest = {
-    pagination: Pagination,
+import IPaged from "./Pagination";
+
+export interface SeriesRequest extends IPaged {
     series: Series[]
 }

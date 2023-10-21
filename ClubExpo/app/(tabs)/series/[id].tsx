@@ -2,28 +2,15 @@ import { Link, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { FlatList, Pressable, StyleSheet } from 'react-native';
 import { Text, View } from '../../../components/Themed';
+import Repository from '../../../components/jnovel-club-api/Repository';
 
 export default function SeriesDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const [volumes, setVolumes] = useState<VolumesRequest>({
-    pagination: {
-      lastPage: true,
-      limit: 1,
-      skip: 0
-    }, volumes: []
-  });
+  const [volumes, setVolumes] = useState<Volume[]>();
 
   const getVolumes = async () => {
-    if (id) {
-      try {
-        const response = await fetch(`https://labs.j-novel.club/app/v1/series/${id}/volumes?format=json`);
-        const json = await response.json();
-        setVolumes(json);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    setVolumes(await Repository.getVolumes(id));
   };
 
   useEffect(() => {
@@ -33,7 +20,7 @@ export default function SeriesDetailScreen() {
   return (
     <View style={styles.container}>
       <FlatList
-        data={volumes?.volumes}
+        data={volumes}
         keyExtractor={({ slug }) => slug}
         renderItem={({ item }) => (
           <Link href={{ pathname: "/volume/[id]", params: {id: item.slug}}} asChild>

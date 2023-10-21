@@ -3,25 +3,15 @@ import { useEffect, useState } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import WebView from 'react-native-webview';
 import { View } from '../../components/Themed';
+import Repository from '../../components/jnovel-club-api/Repository';
 
 export default function PartDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const [part, setPart] = useState<PartData>({
-    clearData: "",
-    partTitle: "Loading...",
-  });
+  const [part, setPart] = useState<PartData>();
 
   const getPart = async () => {
-    if (id) {
-      try {
-        const response = await fetch(`https://labs.j-novel.club/app/v1/parts/${id}/data?format=json`);
-        const json = await response.json();
-        setPart(json);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    setPart(await Repository.getPartData(id))
   };
 
   useEffect(() => {
@@ -34,12 +24,12 @@ export default function PartDetailScreen() {
         Platform.OS !== "web"
           ?
           <WebView
-            source={{ html: part.clearData.replace("</head>", '<meta name="viewport" content="width=device-width, initial-scale=1"><style type="text/css">body {text-align:justify;} img {max-width: 100%}</style></head>') }}
+            source={{ html: part?.clearData?.replace("</head>", '<meta name="viewport" content="width=device-width, initial-scale=1"><style type="text/css">body {text-align:justify;} img {max-width: 100%}</style></head>') ?? "" }}
             style={{ flex: 1, marginTop: 20 }}
 
             pagingEnabled
           />
-          : <iframe style={{ height: '100%' }} srcDoc={part.clearData} />
+          : <iframe style={{ height: '100%' }} srcDoc={part?.clearData} />
       }
     </View>
   );

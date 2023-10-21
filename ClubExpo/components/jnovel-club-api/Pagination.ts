@@ -3,3 +3,7 @@ type Pagination = {
     limit: number;
     skip: number;
   };
+
+export default interface IPaged {
+  pagination: Pagination
+};

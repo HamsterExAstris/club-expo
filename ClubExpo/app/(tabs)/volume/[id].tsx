@@ -2,28 +2,16 @@ import { Link, Stack, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { FlatList, Pressable, StyleSheet } from 'react-native';
 import { Text, View } from '../../../components/Themed';
+import Repository from '../../../components/jnovel-club-api/Repository';
 
 export default function VolumeDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const [parts, setParts] = useState<PartsRequest>({
-    pagination: {
-      lastPage: true,
-      limit: 1,
-      skip: 0
-    }, parts: []
-  });
+  const [parts, setParts] = useState<Part[]>();
 
   const getParts = async () => {
-    if (id) {
-      try {
-        const response = await fetch(`https://labs.j-novel.club/app/v1/volumes/${id}/parts?format=json`);
-        const json = await response.json();
-        setParts(json);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    // TODO: This is firing multiple times. Why?
+    setParts(await Repository.getVolumeParts(id));
   };
 
   useEffect(() => {
@@ -32,21 +20,21 @@ export default function VolumeDetailScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <Stack.Screen 
-      options={{
-        title: id
-      }}/>
+      <Stack.Screen
+        options={{
+          title: id
+        }} />
       <FlatList
-        data={parts?.parts}
+        data={parts}
         keyExtractor={({ slug }) => slug}
         renderItem={({ item }) => (
-          <Link href={{ pathname: "/part/[id]", params: {id: item.slug}}} asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <Text style={{ opacity: pressed ? 0.5 : 1 }}>{item.title}</Text>
-                )}
-              </Pressable>
-            </Link>
+          <Link href={{ pathname: "/part/[id]", params: { id: item.slug } }} asChild>
+            <Pressable>
+              {({ pressed }) => (
+                <Text style={{ opacity: pressed ? 0.5 : 1 }}>{item.title}</Text>
+              )}
+            </Pressable>
+          </Link>
         )}
       />
     </View>
