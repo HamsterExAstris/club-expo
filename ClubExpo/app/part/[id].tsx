@@ -1,8 +1,8 @@
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import WebView from 'react-native-webview';
-import { View } from '../../../components/Themed';
+import { View } from '../../components/Themed';
 
 export default function PartDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -30,10 +30,6 @@ export default function PartDetailScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <Stack.Screen
-        options={{
-          title: id
-        }} />
       {
         Platform.OS !== "web"
           ?
@@ -43,7 +39,7 @@ export default function PartDetailScreen() {
 
             pagingEnabled
           />
-          : <iframe srcDoc={part.clearData} />
+          : <iframe style={{ height: '100%' }} srcDoc={part.clearData} />
       }
     </View>
   );

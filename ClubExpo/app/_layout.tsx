@@ -4,6 +4,7 @@ import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
+import PartTitle from '../components/PartTitle';
 import Unauthorized from './unauthorized';
 
 export {
@@ -72,6 +73,10 @@ function RootLayoutNav() {
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="part/[id]" options={{
+              presentation: 'modal',
+              headerTitle: (props) => <PartTitle />
+            }} />
           </Stack>
           : <Unauthorized />
       }

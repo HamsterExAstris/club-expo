@@ -2,6 +2,8 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Link, Tabs } from 'expo-router';
 import { Pressable, useColorScheme } from 'react-native';
 
+import SeriesTitle from '../../components/SeriesTitle';
+import VolumeTitle from '../../components/VolumeTitle';
 import Colors from '../../constants/Colors';
 
 /**
@@ -46,19 +48,15 @@ export default function TabLayout() {
       <Tabs.Screen
         name="series/[id]"
         options={{
-          href: null
+          href: null,
+          headerTitle: (props) => <SeriesTitle />,
         }}
       />
       <Tabs.Screen
         name="volume/[id]"
         options={{
-          href: null
-        }}
-      />
-      <Tabs.Screen
-        name="part/[id]"
-        options={{
-          href: null
+          href: null,
+          headerTitle: (props) => <VolumeTitle />,
         }}
       />
       <Tabs.Screen
