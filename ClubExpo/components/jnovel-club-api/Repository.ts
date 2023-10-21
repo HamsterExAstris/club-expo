@@ -107,11 +107,18 @@ class Repository {
     };
 
     public static getPart = async (id: string) => {
-        return await getIfId<Part>("parts", id);
+        const result = await getIfId<Part>("parts", id);
+        return (result && (!result.expiration || result.expiration > new Date()))
+            ? result
+            : undefined;
     }
 
     public static getPartData = async (id: string) => {
-        return await getIfId<PartData>("parts", id, "data");
+        // Check to make sure this part isn't expired.
+        const parentPart = await this.getPart(id);
+        return parentPart
+            ? await getIfId<PartData>("parts", id, "data")
+            : undefined;
     }
 }
 

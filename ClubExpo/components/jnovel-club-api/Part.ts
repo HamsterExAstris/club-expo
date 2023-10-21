@@ -1,5 +1,6 @@
 type Part = {
     number: number
     slug: string,
-    title: string,    
+    title: string,  
+    expiration?: Date,  
 }
