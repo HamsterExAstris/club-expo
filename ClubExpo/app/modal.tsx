@@ -1,35 +1,42 @@
 import { StatusBar } from 'expo-status-bar';
-import { FlatList, Platform, StyleSheet } from 'react-native';
+import { Button, FlatList, Platform, StyleSheet } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
-import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 
 export default function ModalScreen() {
   const [keys, setKeys] = useState<readonly string[]>();
 
   const getKeys = async () => {
-    setKeys(await AsyncStorage.getAllKeys());
+    const keys = await AsyncStorage.getAllKeys();
+    setKeys(keys.toSorted());
   };
 
   useEffect(() => {
     getKeys();
   }, []);
 
+  const clearCache = async () => {
+    await AsyncStorage.clear();
+    await getKeys();
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Modal</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      
       <FlatList
         data={keys}
         renderItem={({ item }) => (
           <Text>{item}</Text>
-              )}
+        )}
       />
-      
-      <EditScreenInfo path="app/modal.tsx" />
+
+      <Button
+        onPress={clearCache}
+        title="Clear Cache"
+        color="#841584"
+        accessibilityLabel="Clear the cache"
+      />
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />

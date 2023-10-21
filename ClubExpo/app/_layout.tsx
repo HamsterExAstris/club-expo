@@ -72,7 +72,10 @@ function RootLayoutNav() {
         isLoggedIn ?
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="modal" options={{
+              presentation: 'modal',
+              title: "Clear Cache"
+            }} />
             <Stack.Screen name="part/[id]" options={{
               presentation: 'modal',
               headerTitle: (props) => <PartTitle />
