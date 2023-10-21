@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text, } from './Themed';
+import Repository from "./jnovel-club-api/Repository";
 
 export default function PartTitle() {
     const { id } = useLocalSearchParams<{ id: string }>();
@@ -8,15 +9,7 @@ export default function PartTitle() {
     const [part, setPart] = useState<Part>();
 
     const getPart = async () => {
-        if (id) {
-            try {
-                const response = await fetch(`https://labs.j-novel.club/app/v1/parts/${id}?format=json`);
-                const json = await response.json();
-                setPart(json);
-            } catch (error) {
-                console.error(error);
-            }
-        }
+        setPart(await Repository.getPart(id));
     };
 
     useEffect(() => {

@@ -6,7 +6,6 @@ import { Text, View } from '../../../components/Themed';
 export default function SeriesDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const [series, setSeries] = useState<Series>();
   const [volumes, setVolumes] = useState<VolumesRequest>({
     pagination: {
       lastPage: true,
@@ -14,18 +13,6 @@ export default function SeriesDetailScreen() {
       skip: 0
     }, volumes: []
   });
-
-  const getSeries = async () => {
-    if (id) {
-      try {
-        const response = await fetch(`https://labs.j-novel.club/app/v1/series/${id}?format=json`);
-        const json = await response.json();
-        setSeries(json);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
 
   const getVolumes = async () => {
     if (id) {
@@ -40,14 +27,11 @@ export default function SeriesDetailScreen() {
   };
 
   useEffect(() => {
-    getSeries();
     getVolumes();
   }, [id]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{series?.title}</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <FlatList
         data={volumes?.volumes}
         keyExtractor={({ slug }) => slug}

@@ -1,26 +1,19 @@
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text, } from './Themed';
+import Repository from "./jnovel-club-api/Repository";
 
 export default function VolumeTitle() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const [volume, setVolume] = useState<Volume>();
 
-  const getPart = async () => {
-    if (id) {
-      try {
-        const response = await fetch(`https://labs.j-novel.club/app/v1/volumes/${id}?format=json`);
-        const json = await response.json();
-        setVolume(json);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+  const getVolume = async () => {
+    setVolume(await Repository.getVolume(id));
   };
 
   useEffect(() => {
-    getPart();
+    getVolume();
   }, [id]);
 
   return (<Text>{volume?.title}</Text>)
