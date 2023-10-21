@@ -2,13 +2,15 @@ import { Link } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { FlatList, Pressable, StyleSheet } from 'react-native';
 import { Text, View } from '../../../components/Themed';
+import { useSession } from '../../../components/ctx';
 import Repository from '../../../components/jnovel-club-api/Repository';
 
 export default function SeriesListScreen() {
   const [series, setSeries] = useState<Series[]>();
+  const session = useSession();
 
   const getSeries = async () => {
-    setSeries(await Repository.getAllSeries());
+    setSeries(await Repository.getAllSeries(session?.session));
   };
 
   useEffect(() => {

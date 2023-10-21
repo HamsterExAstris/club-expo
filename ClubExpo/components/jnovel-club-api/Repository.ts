@@ -3,7 +3,7 @@ import { PartsRequest } from './PartsRequest';
 import { SeriesRequest } from './SeriesRequest';
 import { VolumesRequest } from './VolumesRequest';
 
-async function get<T>(type: string, id: string | null = null, subtype: string | null = null, skip: number | null = null, skipCache: boolean = false) {
+async function get<T>(token: string | null | undefined, type: string, id: string | null = null, subtype: string | null = null, skip: number | null = null, skipCache: boolean = false) {
     var result: T | undefined = undefined;
     try {
         let key = type;
@@ -31,7 +31,15 @@ async function get<T>(type: string, id: string | null = null, subtype: string | 
             if (skip) {
                 url += `&skip=${skip}`
             }
-            const response = await fetch(url);
+
+            const headers = new Headers();
+            if (token) {
+                headers.append("Authorization", `Bearer ${token}`); 
+            }
+
+            const response = await fetch(url, {
+                headers: headers
+            });
             result = await response.json();
             if (result && !skipCache) {
                 await AsyncStorage.setItem(key, JSON.stringify(result));
@@ -43,21 +51,21 @@ async function get<T>(type: string, id: string | null = null, subtype: string | 
     return result;
 }
 
-async function getIfId<T>(type: string, id: string | null = null, subtype: string | null = null, skip: number | null = null, skipCache: boolean = false) {
+async function getIfId<T>(token: string | null | undefined, type: string, id: string | null = null, subtype: string | null = null, skip: number | null = null, skipCache: boolean = false) {
     var result: T | undefined = undefined;
     if (id) {
-        result = await get<T>(type, id, subtype, skip, skipCache);
+        result = await get<T>(token, type, id, subtype, skip, skipCache);
     }
     return result;
 }
 
 class Repository {
-    public static getAllSeries = async () => {
+    public static getAllSeries = async (token: string | null | undefined) => {
         let result: Series[] = new Array(0);
-        let request = await get<SeriesRequest>("series", null, null, null, true);
+        let request = await get<SeriesRequest>(token, "series", null, null, null, true);
         while (request && !request.pagination.lastPage) {
             result = result.concat(request.series);
-            request = await get<SeriesRequest>("series", null, null, request.pagination.limit + request.pagination.skip, true);
+            request = await get<SeriesRequest>(token, "series", null, null, request.pagination.limit + request.pagination.skip, true);
         }
         if (request) {
             result = result.concat(request.series);
@@ -66,17 +74,17 @@ class Repository {
         return result;
     };
 
-    public static getSeries = async (id: string) => {
-        return await getIfId<Series>("series", id);
+    public static getSeries = async (token: string | null | undefined, id: string) => {
+        return await getIfId<Series>(token, "series", id);
     };
 
-    public static getVolumes = async (id: string) => {
+    public static getVolumes = async (token: string | null | undefined, id: string) => {
         let result: Volume[] = new Array(0);
         if (id) {
-            let request = await get<VolumesRequest>("series", id, "volumes");
+            let request = await get<VolumesRequest>(token, "series", id, "volumes");
             while (request && !request.pagination.lastPage) {
                 result = result.concat(request.volumes);
-                request = await get<VolumesRequest>("series", id, "volumes", request.pagination.limit + request.pagination.skip);
+                request = await get<VolumesRequest>(token, "series", id, "volumes", request.pagination.limit + request.pagination.skip);
             }
             if (request) {
                 result = result.concat(request.volumes);
@@ -86,17 +94,17 @@ class Repository {
         return result;
     };
 
-    public static getVolume = async (id: string) => {
-        return await getIfId<Volume>("volumes", id);
+    public static getVolume = async (token: string | null | undefined, id: string) => {
+        return await getIfId<Volume>(token, "volumes", id);
     };
 
-    public static getVolumeParts = async (id: string) => {
+    public static getVolumeParts = async (token: string | null | undefined, id: string) => {
         let result: Part[] = new Array(0);
         if (id) {
-            let request = await get<PartsRequest>("volumes", id, "parts");
+            let request = await get<PartsRequest>(token, "volumes", id, "parts");
             while (request && !request.pagination.lastPage) {
                 result = result.concat(request.parts);
-                request = await get<PartsRequest>("volumes", id, "parts", request.pagination.limit + request.pagination.skip);
+                request = await get<PartsRequest>(token, "volumes", id, "parts", request.pagination.limit + request.pagination.skip);
             }
             if (request) {
                 result = result.concat(request.parts);
@@ -106,19 +114,33 @@ class Repository {
         return result;
     };
 
-    public static getPart = async (id: string) => {
-        const result = await getIfId<Part>("parts", id);
+    public static getPart = async (token: string | null | undefined, id: string) => {
+        const result = await getIfId<Part>(token, "parts", id);
         return (result && (!result.expiration || result.expiration > new Date()))
             ? result
             : undefined;
     }
 
-    public static getPartData = async (id: string) => {
+    public static getPartData = async (token: string | null | undefined, id: string) => {
         // Check to make sure this part isn't expired.
-        const parentPart = await this.getPart(id);
+        const parentPart = await this.getPart(token, id);
         return parentPart
-            ? await getIfId<PartData>("parts", id, "data")
+            ? await getIfId<PartData>(token, "parts", id, "data")
             : undefined;
+    }
+
+    public static login = async (username: string, password: string) => {
+        const response = await fetch('https://labs.j-novel.club/app/v1/auth/login?format=json', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({
+                login: username,
+                password: password,
+                slim: true
+            })
+        });
+        const login : LoginResponse = await response.json();
+        return login?.id;
     }
 }
 

@@ -3,15 +3,17 @@ import { useEffect, useState } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import WebView from 'react-native-webview';
 import { View } from '../../components/Themed';
+import { useSession } from '../../components/ctx';
 import Repository from '../../components/jnovel-club-api/Repository';
 
 export default function PartDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const [part, setPart] = useState<PartData>();
+  const session = useSession();
 
   const getPart = async () => {
-    setPart(await Repository.getPartData(id))
+    setPart(await Repository.getPartData(session?.session, id))
   };
 
   useEffect(() => {
